@@ -1,5 +1,5 @@
 from app import db
-from app.models import User, LoginLog
+from .models import User, LoginLog
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 

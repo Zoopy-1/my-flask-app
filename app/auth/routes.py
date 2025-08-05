@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, session
-from app.auth import bp
-from app.services import AuthService
+from .__init__ import bp
+from ..services import AuthService
 
 
 @bp.route('/register', methods=['GET', 'POST'])

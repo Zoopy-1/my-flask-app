@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, session
-from app.main import bp
-from app.services import UserService
+from .__init__ import bp
+from ..services import UserService
 
 
 @bp.route('/')
