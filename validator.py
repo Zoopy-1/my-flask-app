@@ -2,12 +2,8 @@ import pandas as pd
 from sqlalchemy import func
 from database import SessionLocal, StockDailyData
 
-
+# 统计每个交易日的数据条数，检查是否有明显缺失
 def validate_data_completeness():
-    """
-    验证数据的完整性。
-    - 统计每个交易日的数据条数，检查是否有明显缺失。
-    """
     print("\n--- 开始数据完整性校验 ---")
     session = SessionLocal()
     try:
@@ -40,12 +36,8 @@ def validate_data_completeness():
     finally:
         session.close()
 
-
+# 检查是否存在 '最高价 < 最低价' 的异常情况
 def validate_data_integrity():
-    """
-    验证数据的完整性/准确性。
-    - 检查是否存在 '最高价 < 最低价' 的异常情况。
-    """
     print("\n--- 开始数据值正确性校验 ---")
     session = SessionLocal()
     try:

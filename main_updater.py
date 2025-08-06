@@ -7,19 +7,11 @@ from tqdm import tqdm
 from database import SessionLocal, StockDailyData, init_db, DB_FILE
 from data_fetcher import get_all_a_stock_codes, fetch_stock_daily_data
 
-
+# 更新或恢复股票数据
 def update_data(full_restore: bool = False):
-    """
-    更新或恢复股票数据。
-
-    Args:
-        full_restore (bool): 是否执行全量恢复。
-                             True: 删除现有数据库，重新获取近一年全部数据。
-                             False: 执行增量更新，从上次结束的日期开始。
-    """
     session = SessionLocal()
 
-    # --- 1. 确定日期范围 ---
+    # 确定日期范围
     if full_restore:
         print("开始全量恢复模式...")
         if os.path.exists(DB_FILE):
@@ -38,7 +30,6 @@ def update_data(full_restore: bool = False):
             start_date = latest_date_in_db + timedelta(days=1)
             print(f"数据库中最新数据日期为: {latest_date_in_db.strftime('%Y-%m-%d')}")
         else:
-            # 如果数据库为空，则执行首次全量加载
             print("数据库为空，将获取近一年的数据。")
             start_date = datetime.now() - timedelta(days=365)
 
@@ -54,7 +45,7 @@ def update_data(full_restore: bool = False):
 
     print(f"数据更新范围: {start_date_str} 到 {end_date_str}")
 
-    # --- 2. 获取数据并存入数据库 ---
+    # 获取数据并存入数据库
     stock_codes = get_all_a_stock_codes()
     if not stock_codes:
         print("无法获取股票列表，程序退出。")
@@ -62,7 +53,7 @@ def update_data(full_restore: bool = False):
         return
 
     total_codes = len(stock_codes)
-    commit_batch_size = 50  # 每处理50支股票提交一次事务，防止内存占用过高
+    commit_batch_size = 50
 
     try:
         with tqdm(total=total_codes, desc="更新进度") as pbar:
@@ -71,9 +62,9 @@ def update_data(full_restore: bool = False):
                 df = fetch_stock_daily_data(code, start_date_str, end_date_str)
 
                 if df is not None and not df.empty:
-                    # 使用 to_dict('records') 方法高效地将DataFrame转换为字典列表
+                    # 将DataFrame转换为字典列表
                     records = df.to_dict('records')
-                    # 使用 bulk_insert_mappings 高效批量插入
+                    # 高效批量插入
                     session.bulk_insert_mappings(StockDailyData, records)
 
                 # 批量提交
