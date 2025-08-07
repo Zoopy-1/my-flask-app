@@ -1,4 +1,4 @@
-# A股日频行情数据获取与存储系统 (Branch-2)
+# A股日频行情数据获取与存储系统 (Branch2)
 
 本项目是一个用于获取、存储和管理全A股日频行情数据的数据管道工具。它使用 `akshare` 作为数据源，并将数据持久化到 SQLite 数据库中。
 
@@ -21,7 +21,7 @@
     ```bash
     git clone <your-repo-url>
     cd my-flask-app
-    git checkout branch-2
+    git checkout branch2
     ```
 
 2.  **创建并激活虚拟环境** (推荐)
